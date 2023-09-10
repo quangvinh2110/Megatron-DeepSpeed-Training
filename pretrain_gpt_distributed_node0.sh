@@ -8,7 +8,7 @@ set -ex
 GPUS_PER_NODE=4
 # Change for multinode config
 MASTER_ADDR=10.0.2.192
-MASTER_PORT=6000
+MASTER_PORT=8888
 NNODES=2
 NODE_RANK=0
 WORLD_SIZE=$(($GPUS_PER_NODE*$NNODES))
@@ -18,7 +18,7 @@ VOCAB_FILE=./dataset/gpt2-vocab.json
 MERGE_FILE=./dataset/gpt2-merges.txt
 DATA_PATH=./dataset/test-data/<Specify path and file prefix>_text_document
 BASE_PATH=./tmp
-DS_CONFIG=./deepspeed.json
+DS_CONFIG=./ds_config_zero1.json
 
 TP=2
 PP=1
