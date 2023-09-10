@@ -5,13 +5,11 @@ set -ex
 
 # export CUDA_DEVICE_MAX_CONNECTIONS=1
 
-GPUS_PER_NODE=4
 # Change for multinode config
+HOSTFILE=./hostfile
 MASTER_ADDR=10.0.2.192
 MASTER_PORT=6000
-NNODES=2
-NODE_RANK=0
-WORLD_SIZE=$(($GPUS_PER_NODE*$NNODES))
+
 
 CHECKPOINT_PATH=./test-checkpoints
 VOCAB_FILE=./dataset/gpt2-vocab.json
@@ -42,14 +40,13 @@ WEIGHT_DECAY=0.1
 GRAD_CLIP=1
 
 
-ENV_ARGS="CUDA_VISIBLE_DEVICES=1"
+ENV_ARGS="WANDB_DISABLED=true TORCH_CPP_LOG_LEVEL=INFO NCCL_DEBUG=INFO TORCH_DISTRIBUTED_DEBUG=INFO"
 
 DISTRIBUTED_ARGS="
-    --nproc_per_node $GPUS_PER_NODE \
-    --nnodes $NNODES \
-    --node_rank $NODE_RANK \
+    --hostfile $HOSTFILE \
     --master_addr $MASTER_ADDR \
-    --master_port $MASTER_PORT
+    --master_port $MASTER_PORT \
+    --include "10.0.2.192:0,1@10.0.2.191:6,7" \
 "
 
 cat <<EOT > $DS_CONFIG
